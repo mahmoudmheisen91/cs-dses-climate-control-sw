@@ -23,9 +23,10 @@
 		fprintf(logFile, "[%s]\t\t[%s]\t\t[%d]\t\t[%s]\t\t\t%s\n", \
                           type, __FILE__, __LINE__, __func__, msg); \
 		fclose(logFile); \
-		if (type == INFO || type == WARN || type == ERROR) \
+		if ((strcmp(type, INFO) == 0) || (strcmp(type, WARN) == 0) \
+				|| (strcmp(type, ERROR) == 0)) \
         	printf("%s\n", msg); \
-        if (type == ERROR) \
+        if (strcmp(type, ERROR) == 0) \
         	FAIL;
 
 	// Global variables:
@@ -35,15 +36,20 @@
 	int extern_argc;
 
 
-	// Functions prototypes:
+	// Functions Prototypes:
 	int init(void);
 	int initLogging(void);
+	int initCSVFile(void);
+	int initConfigFile(void);
 	FILE* openFile(char fileName[], char* mode);
 	int readData(char fileName[], char* data);
 	int writeData(char fileName[], char* data);
 	double map(double temp);
 	double PIDcontroller(double desired, double actual);
 	int localController(double desired);
+	int wiredController(double desired);
+	int wirelessController(double desired);
+	int realController(double desired);
 
 #endif // CCSLIB_H_
 

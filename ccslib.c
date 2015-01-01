@@ -20,6 +20,9 @@ int init(void) {
 	char sensorTempData[5];
 
 	initLogging();
+	initCSVFile();
+	initConfigFile();
+
 	if (extern_argc != 2) {
 				logging(WARN, "Error running software!, Mismatch number of argument!!!");
 				logging(WARN, "E.g run as follow: ./climateControlSoftware 22500");
@@ -83,6 +86,26 @@ int initLogging(void) {
 	fclose(logFile);
 
     return SUCCESS;
+}
+
+// CSV File Initialization:
+// input parameter:
+//       void : nothing
+// return type:
+//       int  : return SUCCESS
+int initCSVFile(void) {
+
+	return SUCCESS;
+}
+
+// Config File Initialization:
+// input parameter:
+//       void : nothing
+// return type:
+//       int  : return SUCCESS
+int initConfigFile(void) {
+
+	return SUCCESS;
 }
 
 // Open file:
@@ -213,7 +236,7 @@ double PIDcontroller(double desired, double actual) {
     return command;
 }
 
-// The Local Controller:
+// TASK 1: The Local Controller:
 // input parameter:
 //       double desired : desired value to reach
 // return type:
@@ -245,6 +268,45 @@ int localController(double desired) {
 
 	// Important for RT:
 	sleep(1);
+
+	return SUCCESS;
+}
+
+// TASK 2: The Wired Controller:
+// input parameter:
+//       double desired : desired value to reach
+// return type:
+//       int            : return SUCCESS after waiting one second
+int wiredController(double desired) {
+	logging(TRACE, "Entering wiredController() function....");
+
+	logging(TRACE, "Exiting wiredController() function....");
+
+	return SUCCESS;
+}
+
+// TASK 3: The Wireless Controller:
+// input parameter:
+//       double desired : desired value to reach
+// return type:
+//       int            : return SUCCESS after waiting one second
+int wirelessController(double desired) {
+	logging(TRACE, "Entering wirelessController() function....");
+
+	logging(TRACE, "Exiting wirelessController() function....");
+
+	return SUCCESS;
+}
+
+// TASK 4: The Real Controller:
+// input parameter:
+//       double desired : desired value to reach
+// return type:
+//       int            : return SUCCESS after waiting one second
+int realController(double desired) {
+	logging(TRACE, "Entering realController() function....");
+
+	logging(TRACE, "Exiting realController() function....");
 
 	return SUCCESS;
 }
