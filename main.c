@@ -18,6 +18,7 @@ int main(int argc, char **argv) {
 	// Initialization:
 	init();
 
+	// TODO: MESSY
 	// Reading desired value from command line:
 	int strsize = strlen(argv[1]);
 	char* desiredChar = malloc(strsize);

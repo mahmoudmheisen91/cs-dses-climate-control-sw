@@ -35,7 +35,6 @@
 	FILE *knobFile;
 	int extern_argc;
 
-
 	// Functions Prototypes:
 	int init(void);
 	int initLogging(void);
@@ -50,6 +49,8 @@
 	int wiredController(double desired);
 	int wirelessController(double desired);
 	int realController(double desired);
+	int sensorDriver(void);
+	int knobDriver(void);
 
 #endif // CCSLIB_H_
 

@@ -1,6 +1,15 @@
 // ccslib.c:
 // Climate Control Software Library: C File:
 
+// TODO: THROW ERRORS
+// TODO: Split Library
+// TODO: functionalities
+// TODO: Messy code
+// TODO: BUGS
+// TODO: LINUX/KERNAL
+// TODO: GLOBAL VAR's
+// TODO: Comments
+
 // Including Libraries:
 #include <stdio.h>
 #include <stdlib.h>
@@ -15,6 +24,7 @@
 //       int  : return SUCCESS
 int init(void) {
 
+	// TODO: MESSY
 	int command;
 	double actual;
 	char sensorTempData[5];
@@ -24,10 +34,10 @@ int init(void) {
 	initConfigFile();
 
 	if (extern_argc != 2) {
-				logging(WARN, "Error running software!, Mismatch number of argument!!!");
-				logging(WARN, "E.g run as follow: ./climateControlSoftware 22500");
-				logging(WARN, "Terminating program..........");
-				logging(ERROR, "Terminating program..........Done");
+		logging(WARN, "Error running software!, Mismatch number of argument!!!");
+		logging(WARN, "E.g run as follow: ./climateControlSoftware 22500");
+		logging(WARN, "Terminating program..........");
+		logging(ERROR, "Terminating program..........Done");
 	}
 
 	logging(TRACE, "Entering init() function....");
@@ -94,6 +104,11 @@ int initLogging(void) {
 // return type:
 //       int  : return SUCCESS
 int initCSVFile(void) {
+	logging(TRACE, "Entering initCSVFile() function....");
+
+	// TODO: functionality
+
+	logging(TRACE, "Exiting initCSVFile() function....");
 
 	return SUCCESS;
 }
@@ -104,6 +119,11 @@ int initCSVFile(void) {
 // return type:
 //       int  : return SUCCESS
 int initConfigFile(void) {
+	logging(TRACE, "Entering initConfigFile() function....");
+
+	// TODO: functionality
+
+	logging(TRACE, "Exiting initConfigFile() function....");
 
 	return SUCCESS;
 }
@@ -117,15 +137,15 @@ int initConfigFile(void) {
 FILE* openFile(char fileName[], char* mode) {
 	logging(TRACE, "Entering openFile() function....");
 
-    FILE* file = fopen(fileName, "r");
-    if (file == NULL) {
-    	logging(WARN, "Error opening file!, file name does not exists!!!");
-    	logging(WARN, "Terminating program..........");
-    	logging(ERROR, "Terminating program..........Done");
-    }
+	// Check if the file exists:
+	// TODO: R_OK, W_OK
+	if (access(fileName, F_OK) == -1 ) {
+		logging(WARN, "Error opening file!, file name does not exists!!!");
+		logging(WARN, "Terminating program..........");
+		logging(ERROR, "Terminating program..........Done");
+	}
 
-    fclose(file);
-    file = fopen(fileName, mode);
+    FILE* file = fopen(fileName, mode);
 
     logging(TRACE, "Exiting openFile() function....");
 
@@ -159,6 +179,8 @@ int readData(char fileName[], char* data) {
 int writeData(char fileName[], char* data) {
 	logging(TRACE, "Entering writeData() function....");
 
+	// TODO: BUGGY
+
 	FILE* file = openFile(fileName, "w");
     fprintf(file, "%c", *data);
     if (data[1] >= '0')
@@ -187,6 +209,7 @@ double map(double temp) {
 
 	double level = 99 - ((32800 - val)/200);
 
+	// TODO: CHECK LEVEL
 	logging(TRACE, "Exiting map() function....");
 
 	return level;
@@ -201,6 +224,8 @@ double map(double temp) {
 double PIDcontroller(double desired, double actual) {
 	logging(TRACE, "Entering PIDcontroller() function....");
 
+	// TODO: BUGGY if's
+	// TODO: TESTS
     double command = 0;
     double proportional;
     static double dt = 0.01;
@@ -245,6 +270,9 @@ int localController(double desired) {
 
 	logging(TRACE, "Entering localController() function....");
 
+	// TODO: MESSY
+	// TODO: sleep()
+
 	double actual;
 	int command;
 	char sensorTempData[5];
@@ -280,6 +308,8 @@ int localController(double desired) {
 int wiredController(double desired) {
 	logging(TRACE, "Entering wiredController() function....");
 
+	// TODO: functionality
+
 	logging(TRACE, "Exiting wiredController() function....");
 
 	return SUCCESS;
@@ -292,6 +322,8 @@ int wiredController(double desired) {
 //       int            : return SUCCESS after waiting one second
 int wirelessController(double desired) {
 	logging(TRACE, "Entering wirelessController() function....");
+
+	// TODO: functionality
 
 	logging(TRACE, "Exiting wirelessController() function....");
 
@@ -306,7 +338,39 @@ int wirelessController(double desired) {
 int realController(double desired) {
 	logging(TRACE, "Entering realController() function....");
 
+	// TODO: functionality
+
 	logging(TRACE, "Exiting realController() function....");
+
+	return SUCCESS;
+}
+
+// Sensor Driver:
+// input parameter:
+//       void : nothing
+// return type:
+//       int  : return SUCCESS
+int sensorDriver(void) {
+	logging(TRACE, "Entering sensorDriver() function....");
+
+	// TODO: functionality
+
+	logging(TRACE, "Exiting sensorDriver() function....");
+
+	return SUCCESS;
+}
+
+// Knob Driver:
+// input parameter:
+//       void : nothing
+// return type:
+//       int  : return SUCCESS
+int knobDriver(void) {
+	logging(TRACE, "Entering knobDriver() function....");
+
+	// TODO: functionality
+
+	logging(TRACE, "Exiting knobDriver() function....");
 
 	return SUCCESS;
 }
