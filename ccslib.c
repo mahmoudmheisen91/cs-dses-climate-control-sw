@@ -19,41 +19,70 @@ int init(void) {
 	double actual;
 	char sensorTempData[5];
 
-	printf("\nInitializing Climate Control Software....\n");
+	initLogging();
+	if (extern_argc != 2) {
+				logging(WARN, "Error running software!, Mismatch number of argument!!!");
+				logging(WARN, "E.g run as follow: ./climateControlSoftware 22500");
+				logging(WARN, "Terminating program..........");
+				logging(ERROR, "Terminating program..........Done");
+	}
+
+	logging(TRACE, "Entering init() function....");
+	logging(INFO, "Initializing Climate Control Software....");
+
+	sleep(1);
+	logging(INFO, "Initializing Climate Control Software....Done");
 	sleep(1);
 
-	printf("Initializing Climate Control Software....Done\n");
+	logging(INFO, "Checking sensor device file....");
 	sleep(1);
-	printf("Checking sensor device file....\n");
-	sleep(1);
-	printf("Openning /dev/temp_sensor....\n");
+	logging(INFO, "Openning /dev/temp_sensor....");
 	FILE* file = openFile("/dev/temp_sensor", "r");
 	readData("/dev/temp_sensor", sensorTempData);
 	actual = (double) atof(sensorTempData)/ 1000;
 	sleep(1);
+	//logging(INFO, "Initializing Climate Control Software....Done");
 	printf("Current sensor data is.... %.2f°C\n", actual);
 	sleep(1);
 	fclose(file);
-	printf("Checking sensor device file....Done\n");
+	logging(INFO, "Checking sensor device file....Done");
 	sleep(1);
 
-	printf("Checking knob device file....\n");
+	logging(INFO, "Checking knob device file....");
 	sleep(1);
-	printf("Openning /dev/temp_knob....\n");
+	logging(INFO, "Openning /dev/temp_knob....");
 	file = openFile("/dev/temp_knob", "r");
 	command = map(actual);
 	sleep(1);
+	//logging(INFO, "Initializing Climate Control Software....Done");
 	printf("Current knob level is.... %d\n", command);
 	sleep(1);
 	fclose(file);
-	printf("Checking knob device file....Done\n");
+	logging(INFO, "Checking knob device file....Done");
 	sleep(1);
 
-	printf("The PID Controller will start in 5 seconds.....\n");
+	logging(INFO, "The PID Controller will start in 5 seconds.....");
 	sleep(5);
-	printf("The PID Controller will start in 5 seconds.....Done\n\n");
+	logging(INFO, "The PID Controller will start in 5 seconds.....Done");
+	logging(TRACE, "Exiting init() function....");
 
 	return SUCCESS;
+}
+
+// Logging Function Initialization:
+// input parameter:
+//       void : nothing
+// return type:
+//       int  : return SUCCESS
+int initLogging(void) {
+
+	logFile = fopen("log", "a");
+	fprintf(logFile, "\n##################################################\n");
+	fprintf(logFile, "#################### [NEW RUN] ###################\n");
+	fprintf(logFile, "##################################################\n\n");
+	fclose(logFile);
+
+    return SUCCESS;
 }
 
 // Open file:
@@ -63,17 +92,19 @@ int init(void) {
 // return type:
 //       FILE*          : pointer to the wanted file
 FILE* openFile(char fileName[], char* mode) {
+	logging(TRACE, "Entering openFile() function....");
+
     FILE* file = fopen(fileName, "r");
     if (file == NULL) {
-        fprintf(stderr, "Error opening file!, ");
-        fprintf(stderr, "file name does not exists\n");
-        fprintf(stderr, "Terminating program..........\n");
-        fprintf(stderr, "Terminating program..........Done\n");
-        FAIL;
+    	logging(WARN, "Error opening file!, file name does not exists!!!");
+    	logging(WARN, "Terminating program..........");
+    	logging(ERROR, "Terminating program..........Done");
     }
 
     fclose(file);
     file = fopen(fileName, mode);
+
+    logging(TRACE, "Exiting openFile() function....");
 
     return file;
 }
@@ -85,9 +116,13 @@ FILE* openFile(char fileName[], char* mode) {
 // return type:
 //       int            : return SUCCESS, data array contain sensor data
 int readData(char fileName[], char* data) {
+	logging(TRACE, "Entering readData() function....");
+
 	FILE* file = openFile(fileName, "r");
     fscanf(file, "%s", data);
     fclose(file);
+
+    logging(TRACE, "Exiting readData() function....");
 
     return SUCCESS;
 }
@@ -99,11 +134,15 @@ int readData(char fileName[], char* data) {
 // return type:
 //       int            : return SUCCESS, file contain temp level
 int writeData(char fileName[], char* data) {
+	logging(TRACE, "Entering writeData() function....");
+
 	FILE* file = openFile(fileName, "w");
     fprintf(file, "%c", *data);
     if (data[1] >= '0')
         fprintf(file, "%c\n", *(data+1));
     fclose(file);
+
+    logging(TRACE, "Exiting writeData() function....");
 
     return SUCCESS;
 }
@@ -114,15 +153,18 @@ int writeData(char fileName[], char* data) {
 // return type:
 //       double      : return level between 0-99
 double map(double temp) {
+	logging(TRACE, "Entering map() function....");
+
 	int val = (int)(temp*1000);
 	if (val > 32800 || val < 13000) {
-	    fprintf(stderr, "Error temp out of range!\n");
-	    fprintf(stderr, "Terminating program..........\n");
-	    fprintf(stderr, "Terminating program..........Done\n");
-	    FAIL;
+		logging(WARN, "Error temp out of range!");
+		logging(WARN, "Terminating program..........");
+		logging(ERROR, "Terminating program..........Done");
 	}
 
 	double level = 99 - ((32800 - val)/200);
+
+	logging(TRACE, "Exiting map() function....");
 
 	return level;
 }
@@ -134,6 +176,8 @@ double map(double temp) {
 // return type:
 //       double         : return command (set level) to knob
 double PIDcontroller(double desired, double actual) {
+	logging(TRACE, "Entering PIDcontroller() function....");
+
     double command = 0;
     double proportional;
     static double dt = 0.01;
@@ -150,8 +194,9 @@ double PIDcontroller(double desired, double actual) {
     // Command:
     command = Kp * proportional + Ki * integral + Kd * derivative;
 
-    // Update error:
+    // Update:
     preError = error;
+    dt += 0.01;
 
     if (error > 1)
     	command = 99;
@@ -163,6 +208,43 @@ double PIDcontroller(double desired, double actual) {
     else if (command < map(actual))
     	command = map(actual) + 1;
 
+    logging(TRACE, "Exiting PIDcontroller() function....");
+
     return command;
 }
 
+// The Local Controller:
+// input parameter:
+//       double desired : desired value to reach
+// return type:
+//       int            : return SUCCESS after waiting one second
+int localController(double desired) {
+
+	logging(TRACE, "Entering localController() function....");
+
+	double actual;
+	int command;
+	char sensorTempData[5];
+	char commandStr[15];
+
+	// Read Sensor Data:
+	readData("/dev/temp_sensor", sensorTempData);
+	actual = (double) atof(sensorTempData)/ 1000;
+
+	// command (set level) to knob:
+	command = PIDcontroller(desired, actual);
+	sprintf(commandStr, "%d", command);
+
+	// Write data to knob:
+	writeData("/dev/temp_knob", commandStr);
+
+	// Print to screen:
+	printf("Sensor Reading = %.2f°C  ==>  Knob Level = %s\n", actual, commandStr);
+
+	logging(TRACE, "Exiting localController() function....");
+
+	// Important for RT:
+	sleep(1);
+
+	return SUCCESS;
+}
