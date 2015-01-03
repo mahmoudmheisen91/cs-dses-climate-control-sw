@@ -53,6 +53,5 @@
 	int realController(double desired);
 	int sensorDriver(void);
 	int knobDriver(void);
-	void *realtime(void* arg)
 
 #endif // CCSLIB_H_
