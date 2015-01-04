@@ -16,6 +16,11 @@
 	#define Kp 			1
 	#define Ki 			0
 	#define Kd 			0
+	#define true 		1
+	#define false 		0
+
+	// type definition:
+	typedef int bool;
 
 	// TODO: comments
 	// TODO: pragma
