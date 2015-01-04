@@ -48,8 +48,7 @@
 
 	// Global variables:
 	FILE *logFile;
-	FILE *sensorFile;
-	FILE *knobFile;
+
 	// TODO
 	int extern_argc;
 

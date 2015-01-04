@@ -89,6 +89,7 @@ int init(void) {
 //       int  : return SUCCESS
 int initLogging(void) {
 
+	// TODO: print time and date:
 	logFile = fopen("log", "a");
 	fprintf(logFile, "\n##################################################\n");
 	fprintf(logFile, "#################### [NEW RUN] ###################\n");
@@ -137,8 +138,8 @@ int initConfigFile(void) {
 FILE* openFile(char fileName[], char* mode) {
 	logging(TRACE, "Entering openFile() function....");
 
-	// Check if the file exists:
 	// TODO: R_OK, W_OK
+	// Check if the file exists:
 	if (access(fileName, F_OK) == -1 ) {
 		logging(WARN, "Error opening file!, file name does not exists!!!");
 		logging(WARN, "Terminating program..........");
