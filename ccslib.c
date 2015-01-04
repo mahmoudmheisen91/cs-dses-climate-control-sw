@@ -35,7 +35,7 @@ int init(void) {
 
 	if (extern_argc != 2) {
 		logging(WARN, "Error running software!, Mismatch number of argument!!!");
-		logging(WARN, "E.g run as follow: ./climateControlSoftware 22500");
+		logging(WARN, "E.g run as follow: ./climateControlSoftware 22.5");
 		logging(WARN, "Terminating program..........");
 		logging(ERROR, "Terminating program..........Done");
 	}

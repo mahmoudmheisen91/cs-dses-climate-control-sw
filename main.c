@@ -1,18 +1,16 @@
-// Climate Control Software:
+// Climate Control Software Client Code:
 
-// Including Libraries:
+// Including libraries:
 #include <stdio.h>
 #include <stdlib.h>
-#include <unistd.h>
-#include <string.h>
 #include "ccslib.h"
 
 // Global Variables:
 double desired;
 double actual;
-int command;
+double level;
 char sensorTempData[5];
-char commandStr[15];
+char levelStr[15];
 double temp = 0.0;
 bool firstLoop = true;
 
@@ -30,27 +28,24 @@ int main(int argc, char **argv) {
 
 	// Infinite Loop:
 	while (1) {
-		// TODO: MESSY
-		// TASK 1: The Local Controller:
-
-		// Read Sensor Data:
+		// Read Sensor Data and transfer it to double:
 		readData("/dev/temp_sensor", sensorTempData);
 		actual = (double) atof(sensorTempData)/ 1000;
 
-		// sense an event in sensor:
+		// Sense an event in sensor:
 		isEvent(temp, actual);
 		temp = actual;
 
-		// command (set level) to knob:
-		command = PIDcontroller(desired, actual);
-		sprintf(commandStr, "%d", command);
+		// Calculate knob level and transfer it to string:
+		level = PIDcontroller(desired, actual);
+		sprintf(levelStr, "%f", level);
 
-		// Write data to knob:
-		writeData("/dev/temp_knob", commandStr);
+		// Write level to knob:
+		writeData("/dev/temp_knob", levelStr);
 
 		// Print to screen:
-		printf("Sensor Reading = %.2f°C  ==>  Knob Level = %s\n",
-				actual, commandStr);
+		printf("Sensor Reading = %.2f°C  ==>  Knob Level = %.0f\n",
+				actual, level);
 	}
 
 	return SUCCESS;
