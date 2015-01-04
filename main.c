@@ -21,21 +21,16 @@ int main(int argc, char **argv) {
 
 	extern_argc = argc;
 
-	// Initialization:
+	// Software Initialization:
 	init();
 
-	// TODO: MESSY
+	// TODO: config file:
 	// Reading desired value from command line:
-	int strsize = strlen(argv[1]);
-	char* desiredChar = malloc(strsize);
-	strcat(desiredChar, argv[1]);
-	desiredChar[strsize] = '\0';
-	desired = (double) atof(desiredChar)/ 1000;
+	desired = atof(argv[1]);
 
 	// Infinite Loop:
 	while (1) {
 		// TODO: MESSY
-		// TODO: sleep()
 		// TASK 1: The Local Controller:
 
 		// Read Sensor Data:
