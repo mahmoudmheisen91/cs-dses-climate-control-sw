@@ -270,32 +270,9 @@ int localController(double desired) {
 
 	logging(TRACE, "Entering localController() function....");
 
-	// TODO: MESSY
-	// TODO: sleep()
-
-	double actual;
-	int command;
-	char sensorTempData[5];
-	char commandStr[15];
-
-	// Read Sensor Data:
-	readData("/dev/temp_sensor", sensorTempData);
-	actual = (double) atof(sensorTempData)/ 1000;
-
-	// command (set level) to knob:
-	command = PIDcontroller(desired, actual);
-	sprintf(commandStr, "%d", command);
-
-	// Write data to knob:
-	writeData("/dev/temp_knob", commandStr);
-
-	// Print to screen:
-	printf("Sensor Reading = %.2f°C  ==>  Knob Level = %s\n", actual, commandStr);
+	// TODO: functionality
 
 	logging(TRACE, "Exiting localController() function....");
-
-	// Important for RT:
-	sleep(1);
 
 	return SUCCESS;
 }
