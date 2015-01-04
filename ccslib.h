@@ -6,11 +6,11 @@
 
 	// Define Constants::
 	#define TRACE 		"trace"
-	#define DEBUG 		"debug"
+	#define DEBUG 		"debug" // TODO
 	#define INFO  		"info"
 	#define WARN  		"warn"
 	#define ERROR 		"error"
-	#define FATAL 		"fatal"
+	#define FATAL 		"fatal" // TODO
 	#define FAIL 		exit(1)
 	#define SUCCESS 	0
 	#define Kp 			1
@@ -36,10 +36,21 @@
         if (strcmp(type, ERROR) == 0) \
         	FAIL;
 
+	// TODO: comments:
+	// TODO: correct here (0.1)
+	#define isEvent(old, new) \
+		if (firstLoop) { \
+			old = new + 0.01; \
+			firstLoop = false; \
+		} \
+		if (new == old) \
+			continue;
+
 	// Global variables:
 	FILE *logFile;
 	FILE *sensorFile;
 	FILE *knobFile;
+	// TODO
 	int extern_argc;
 
 	// Functions Prototypes:
@@ -58,6 +69,5 @@
 	int realController(double desired);
 	int sensorDriver(void);
 	int knobDriver(void);
-	void *realtime(void* arg)
 
 #endif // CCSLIB_H_

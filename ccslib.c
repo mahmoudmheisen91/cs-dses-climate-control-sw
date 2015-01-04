@@ -351,8 +351,3 @@ int knobDriver(void) {
 
 	return SUCCESS;
 }
-
-// Real Time tasks:
-void *realtime(void* arg) {
-	// init rt_read and rt_write
-}

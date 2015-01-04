@@ -9,6 +9,12 @@
 
 // Global Variables:
 double desired;
+double actual;
+int command;
+char sensorTempData[5];
+char commandStr[15];
+double temp = 0.0;
+bool firstLoop = true;
 
 // main function:
 int main(int argc, char **argv) {
@@ -31,14 +37,14 @@ int main(int argc, char **argv) {
 		// TODO: MESSY
 		// TODO: sleep()
 		// TASK 1: The Local Controller:
-		double actual;
-		int command;
-		char sensorTempData[5];
-		char commandStr[15];
 
 		// Read Sensor Data:
 		readData("/dev/temp_sensor", sensorTempData);
 		actual = (double) atof(sensorTempData)/ 1000;
+
+		// sense an event in sensor:
+		isEvent(temp, actual);
+		temp = actual;
 
 		// command (set level) to knob:
 		command = PIDcontroller(desired, actual);
@@ -48,12 +54,8 @@ int main(int argc, char **argv) {
 		writeData("/dev/temp_knob", commandStr);
 
 		// Print to screen:
-		printf("Sensor Reading = %.2f°C  ==>  Knob Level = %s\n", actual, commandStr);
-
-
-
-		// Important for RT:
-		sleep(1);
+		printf("Sensor Reading = %.2f°C  ==>  Knob Level = %s\n",
+				actual, commandStr);
 	}
 
 	return SUCCESS;
