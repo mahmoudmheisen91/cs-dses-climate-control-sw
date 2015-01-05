@@ -14,9 +14,6 @@ char levelStr[15];
 double temp = 0.0;
 bool firstLoop = true;
 
-#include <string.h>
-#include <unistd.h>
-
 // main function:
 int main(int argc, char **argv) {
 

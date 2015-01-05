@@ -60,7 +60,7 @@
 	FILE* openFile(char fileName[], char* mode);
 	int readData(char fileName[], char* data);
 	int writeData(char fileName[], char* data);
-	double map(double temp);
+	int map(double temp);
 	double PIDcontroller(double desired, double actual);
 	int localController(double desired);
 	int wiredController(double desired);

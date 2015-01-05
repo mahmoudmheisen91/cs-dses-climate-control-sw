@@ -198,17 +198,17 @@ int writeData(char fileName[], char* data) {
 //       double temp : temp in millidegree
 // return type:
 //       double      : return level between 0-99
-double map(double temp) {
+int map(double temp) {
 	logging(TRACE, "Entering map() function....");
 
-	int val = (int)(temp*1000);
-	if (val > 32800 || val < 13000) {
+	temp = (int) (temp * 1000);
+	if (temp > 32800 || temp < 13000) {
 		logging(WARN, "Error temp out of range!");
 		logging(WARN, "Terminating program..........");
 		logging(ERROR, "Terminating program..........Done");
 	}
 
-	double level = 99 - ((32800 - val)/200);
+	int level = 99 - ((32800 - temp)/200);
 
 	// TODO: CHECK LEVEL
 	logging(TRACE, "Exiting map() function....");
@@ -227,12 +227,12 @@ double PIDcontroller(double desired, double actual) {
 
 	// TODO: BUGGY if's
 	// TODO: TESTS
-    double level = 0;
+    double level = 0.0;
     double proportional;
     static double dt = 0.01;
-    static double integral = 0;
+    static double integral = 0.0;
     double derivative;
-    static double preError = 0;
+    static double preError = 0.0;
     double error = desired - actual;
 
     // Calculate P,I,D:
@@ -252,7 +252,7 @@ double PIDcontroller(double desired, double actual) {
     	level = 99;
 
     // if level more than the max, set level to max:
-    if (level >= 99)
+    if (level > 99)
     	level = 99;
 
     if (level <= 0 && map(actual) > 0)
