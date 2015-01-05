@@ -227,7 +227,7 @@ double PIDcontroller(double desired, double actual) {
 
 	// TODO: BUGGY if's
 	// TODO: TESTS
-    double command = 0;
+    double level = 0;
     double proportional;
     static double dt = 0.01;
     static double integral = 0;
@@ -241,25 +241,32 @@ double PIDcontroller(double desired, double actual) {
     derivative = (error - preError) / dt;
 
     // Command:
-    command = Kp * proportional + Ki * integral + Kd * derivative;
+    level = Kp * proportional + Ki * integral + Kd * derivative;
 
     // Update:
     preError = error;
     dt += 0.01;
 
+    // if diff. between desired and actual is large, set level to max:
     if (error > 1)
-    	command = 99;
+    	level = 99;
 
-    if (command <= 0)
-    	command = map(actual) - 1;
-    else if (command > 99)
-    	command = 99;
-    else if (command < map(actual))
-    	command = map(actual) + 1;
+    // if level more than the max, set level to max:
+    if (level >= 99)
+    	level = 99;
+
+    if (level <= 0 && map(actual) > 0)
+       	level = map(actual) - 1;
+    else if (level <= 0 && map(actual) <= 0)
+        level = map(actual);
+    else if (level < map(actual) && map(actual) < 99)
+    	level = map(actual) + 1;
+    else if (level < map(actual) && map(actual) >= 99)
+    	level = map(actual);
 
     logging(TRACE, "Exiting PIDcontroller() function....");
 
-    return command;
+    return level;
 }
 
 // TASK 1: The Local Controller:
