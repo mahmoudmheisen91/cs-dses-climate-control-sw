@@ -1,11 +1,14 @@
 // ccslib.h:
 // Climate Control Software Library: Header File:
+// TODO: reset
+// TODO: linux app
+// TODO: low level i/o
 
 #ifndef CCSLIB_H_
 #define CCSLIB_H_
 
 	// Define Constants::
-	#define TRACE 		"trace"
+	#define TRACE 		"trace" // TODO
 	#define DEBUG 		"debug" // TODO
 	#define INFO  		"info"
 	#define WARN  		"warn"

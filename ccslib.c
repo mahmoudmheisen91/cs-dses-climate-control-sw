@@ -225,7 +225,7 @@ int map(double temp) {
 double PIDcontroller(double desired, double actual) {
 	logging(TRACE, "Entering PIDcontroller() function....");
 
-	// TODO: BUGGY if's
+	// TODO: BUGGY if's: less than 15;
 	// TODO: TESTS
     double level = 0.0;
     double proportional;
