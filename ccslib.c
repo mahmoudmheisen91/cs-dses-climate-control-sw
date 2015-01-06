@@ -264,6 +264,25 @@ int getTime(void) {
     return hour;
 }
 
+// Search desired temp:
+// input parameter:
+//       int   : current hour
+// return type:
+//       float : return correspondence temp from config file:
+float search(int hour) {
+    FILE* configFile = openFile("config", "r");
+
+    int config_hour;
+    float desired;
+
+    while (fscanf(configFile, "%d %f", &config_hour, &desired) != EOF) {
+        if (config_hour == hour)
+            break;
+    }
+
+    return desired;
+}
+
 // TASK 4: The Real Controller:
 // input parameter:
 //       double desired : desired value to reach
