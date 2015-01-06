@@ -1,14 +1,9 @@
 // ccslib.c:
 // Climate Control Software Library: C File:
 
-// TODO: THROW ERRORS
-// TODO: Split Library
 // TODO: functionalities
-// TODO: Messy code
 // TODO: BUGS
 // TODO: LINUX/KERNAL
-// TODO: GLOBAL VAR's
-// TODO: Comments
 
 // Including Libraries:
 #include <stdio.h>
@@ -29,7 +24,7 @@ int init(void) {
 	double actual;
 	char sensorTempData[5];
 
-	initLogging();
+	initLogging("G44/log");
 	initCSVFile();
 	initConfigFile();
 
@@ -40,7 +35,6 @@ int init(void) {
 		logging(ERROR, "Terminating program..........Done");
 	}
 
-	logging(TRACE, "Entering init() function....");
 	logging(INFO, "Initializing Climate Control Software....");
 
 	sleep(1);
@@ -77,7 +71,6 @@ int init(void) {
 	logging(INFO, "The PID Controller will start in 5 seconds.....");
 	sleep(5);
 	logging(INFO, "The PID Controller will start in 5 seconds.....Done");
-	logging(TRACE, "Exiting init() function....");
 
 	return SUCCESS;
 }
@@ -87,10 +80,10 @@ int init(void) {
 //       void : nothing
 // return type:
 //       int  : return SUCCESS
-int initLogging(void) {
+int initLogging(char fileName[]) {
 
 	// TODO: print time and date:
-	logFile = fopen("log", "a");
+	logFile = openFile(fileName, "a");
 	fprintf(logFile, "\n##################################################\n");
 	fprintf(logFile, "#################### [NEW RUN] ###################\n");
 	fprintf(logFile, "##################################################\n\n");
@@ -105,11 +98,11 @@ int initLogging(void) {
 // return type:
 //       int  : return SUCCESS
 int initCSVFile(void) {
-	logging(TRACE, "Entering initCSVFile() function....");
+	//logging(TRACE, "Entering initCSVFile() function....");
 
 	// TODO: functionality
 
-	logging(TRACE, "Exiting initCSVFile() function....");
+	//logging(TRACE, "Exiting initCSVFile() function....");
 
 	return SUCCESS;
 }
@@ -120,11 +113,11 @@ int initCSVFile(void) {
 // return type:
 //       int  : return SUCCESS
 int initConfigFile(void) {
-	logging(TRACE, "Entering initConfigFile() function....");
+	//logging(TRACE, "Entering initConfigFile() function....");
 
 	// TODO: functionality
 
-	logging(TRACE, "Exiting initConfigFile() function....");
+	//logging(TRACE, "Exiting initConfigFile() function....");
 
 	return SUCCESS;
 }
@@ -136,9 +129,7 @@ int initConfigFile(void) {
 // return type:
 //       FILE*          : pointer to the wanted file
 FILE* openFile(char fileName[], char* mode) {
-	logging(TRACE, "Entering openFile() function....");
 
-	// TODO: R_OK, W_OK
 	// Check if the file exists:
 	if (access(fileName, F_OK) == -1 ) {
 		logging(WARN, "Error opening file!, file name does not exists!!!");
@@ -146,9 +137,8 @@ FILE* openFile(char fileName[], char* mode) {
 		logging(ERROR, "Terminating program..........Done");
 	}
 
+	// Open the file:
     FILE* file = fopen(fileName, mode);
-
-    logging(TRACE, "Exiting openFile() function....");
 
     return file;
 }
@@ -160,13 +150,11 @@ FILE* openFile(char fileName[], char* mode) {
 // return type:
 //       int            : return SUCCESS, data array contain sensor data
 int readData(char fileName[], char* data) {
-	logging(TRACE, "Entering readData() function....");
 
+	// Open, read and close:
 	FILE* file = openFile(fileName, "r");
     fscanf(file, "%s", data);
     fclose(file);
-
-    logging(TRACE, "Exiting readData() function....");
 
     return SUCCESS;
 }
@@ -178,17 +166,14 @@ int readData(char fileName[], char* data) {
 // return type:
 //       int            : return SUCCESS, file contain temp level
 int writeData(char fileName[], char* data) {
-	logging(TRACE, "Entering writeData() function....");
 
 	// TODO: BUGGY
-
+	// Write maximum of two characters:
 	FILE* file = openFile(fileName, "w");
     fprintf(file, "%c", *data);
     if (data[1] >= '0')
         fprintf(file, "%c\n", *(data+1));
     fclose(file);
-
-    logging(TRACE, "Exiting writeData() function....");
 
     return SUCCESS;
 }
@@ -197,10 +182,10 @@ int writeData(char fileName[], char* data) {
 // input parameter:
 //       double temp : temp in millidegree
 // return type:
-//       double      : return level between 0-99
+//       int         : return level between 0-99
 int map(double temp) {
-	logging(TRACE, "Entering map() function....");
 
+	// Transfer temp to int for safe comparing:
 	temp = (int) (temp * 1000);
 	if (temp > 32800 || temp < 13000) {
 		logging(WARN, "Error temp out of range!");
@@ -208,10 +193,8 @@ int map(double temp) {
 		logging(ERROR, "Terminating program..........Done");
 	}
 
+	// Map temp to level between 0-99:
 	int level = 99 - ((32800 - temp)/200);
-
-	// TODO: CHECK LEVEL
-	logging(TRACE, "Exiting map() function....");
 
 	return level;
 }
@@ -223,10 +206,8 @@ int map(double temp) {
 // return type:
 //       double         : return command (set level) to knob
 double PIDcontroller(double desired, double actual) {
-	logging(TRACE, "Entering PIDcontroller() function....");
 
 	// TODO: BUGGY if's: less than 15;
-	// TODO: TESTS
     double level = 0.0;
     double proportional;
     static double dt = 0.01;
@@ -264,56 +245,9 @@ double PIDcontroller(double desired, double actual) {
     else if (level < map(actual) && map(actual) >= 99)
     	level = map(actual);
 
-    logging(TRACE, "Exiting PIDcontroller() function....");
-
     return level;
 }
 
-// TASK 1: The Local Controller:
-// input parameter:
-//       double desired : desired value to reach
-// return type:
-//       int            : return SUCCESS after waiting one second
-int localController(double desired) {
-
-	logging(TRACE, "Entering localController() function....");
-
-	// TODO: functionality
-
-	logging(TRACE, "Exiting localController() function....");
-
-	return SUCCESS;
-}
-
-// TASK 2: The Wired Controller:
-// input parameter:
-//       double desired : desired value to reach
-// return type:
-//       int            : return SUCCESS after waiting one second
-int wiredController(double desired) {
-	logging(TRACE, "Entering wiredController() function....");
-
-	// TODO: functionality
-
-	logging(TRACE, "Exiting wiredController() function....");
-
-	return SUCCESS;
-}
-
-// TASK 3: The Wireless Controller:
-// input parameter:
-//       double desired : desired value to reach
-// return type:
-//       int            : return SUCCESS after waiting one second
-int wirelessController(double desired) {
-	logging(TRACE, "Entering wirelessController() function....");
-
-	// TODO: functionality
-
-	logging(TRACE, "Exiting wirelessController() function....");
-
-	return SUCCESS;
-}
 
 // TASK 4: The Real Controller:
 // input parameter:
@@ -321,41 +255,11 @@ int wirelessController(double desired) {
 // return type:
 //       int            : return SUCCESS after waiting one second
 int realController(double desired) {
-	logging(TRACE, "Entering realController() function....");
+	//logging(TRACE, "Entering realController() function....");
 
 	// TODO: functionality
 
-	logging(TRACE, "Exiting realController() function....");
-
-	return SUCCESS;
-}
-
-// Sensor Driver:
-// input parameter:
-//       void : nothing
-// return type:
-//       int  : return SUCCESS
-int sensorDriver(void) {
-	logging(TRACE, "Entering sensorDriver() function....");
-
-	// TODO: functionality
-
-	logging(TRACE, "Exiting sensorDriver() function....");
-
-	return SUCCESS;
-}
-
-// Knob Driver:
-// input parameter:
-//       void : nothing
-// return type:
-//       int  : return SUCCESS
-int knobDriver(void) {
-	logging(TRACE, "Entering knobDriver() function....");
-
-	// TODO: functionality
-
-	logging(TRACE, "Exiting knobDriver() function....");
+	//logging(TRACE, "Exiting realController() function....");
 
 	return SUCCESS;
 }

@@ -1,6 +1,6 @@
 // ccslib.h:
 // Climate Control Software Library: Header File:
-// TODO: reset
+
 // TODO: linux app
 // TODO: low level i/o
 
@@ -8,12 +8,12 @@
 #define CCSLIB_H_
 
 	// Define Constants::
-	#define TRACE 		"trace" // TODO
-	#define DEBUG 		"debug" // TODO
+	#define TRACE 		"trace"
+	#define DEBUG 		"debug"
 	#define INFO  		"info"
 	#define WARN  		"warn"
 	#define ERROR 		"error"
-	#define FATAL 		"fatal" // TODO
+	#define FATAL 		"fatal"
 	#define FAIL 		exit(1)
 	#define SUCCESS 	0
 	#define Kp 			1
@@ -57,7 +57,7 @@
 
 	// Functions Prototypes:
 	int init(void);
-	int initLogging(void);
+	int initLogging(char fileName[]);
 	int initCSVFile(void);
 	int initConfigFile(void);
 	FILE* openFile(char fileName[], char* mode);
@@ -65,11 +65,5 @@
 	int writeData(char fileName[], char* data);
 	int map(double temp);
 	double PIDcontroller(double desired, double actual);
-	int localController(double desired);
-	int wiredController(double desired);
-	int wirelessController(double desired);
-	int realController(double desired);
-	int sensorDriver(void);
-	int knobDriver(void);
 
 #endif // CCSLIB_H_
