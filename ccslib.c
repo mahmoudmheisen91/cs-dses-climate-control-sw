@@ -283,6 +283,19 @@ float search(int hour) {
     return desired;
 }
 
+// Get desired temp:
+// input parameter:
+//       void   : nothing
+// return type:
+//       double : return desired temp from config file:
+double getDesired(void) {
+
+	int hour = getTime();
+    double desired = search(hour);
+
+    return desired;
+}
+
 // TASK 4: The Real Controller:
 // input parameter:
 //       double desired : desired value to reach

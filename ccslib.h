@@ -67,6 +67,7 @@
 	double PIDcontroller(double desired, double actual);
 	int getTime(void);
 	float search(int hour);
+	double getDesired(void);
 	int realController(double desired);
 
 #endif // CCSLIB_H_
