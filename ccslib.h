@@ -65,5 +65,7 @@
 	int writeData(char fileName[], char* data);
 	int map(double temp);
 	double PIDcontroller(double desired, double actual);
+	int getTime(void);
+	int realController(double desired);
 
 #endif // CCSLIB_H_

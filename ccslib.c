@@ -10,6 +10,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
+#include <time.h>
 #include "ccslib.h"
 
 // Software Initialization:
@@ -248,6 +249,20 @@ double PIDcontroller(double desired, double actual) {
     return level;
 }
 
+// Get Local time:
+// input parameter:
+//       void : nothing
+// return type:
+//       int  : return integer between 0 and 23 indicating current hour
+int getTime(void) {
+    time_t mytime;
+    time(&mytime);
+
+    struct tm *now = localtime(&mytime);
+    int hour = now->tm_hour;
+
+    return hour;
+}
 
 // TASK 4: The Real Controller:
 // input parameter:
