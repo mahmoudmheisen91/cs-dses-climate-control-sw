@@ -4,7 +4,7 @@
 #ifndef CCSLIB_H_
 #define CCSLIB_H_
 
-	// Define Constants::
+    // Define Constants:
 	#define TRACE 		"trace"
 	#define DEBUG 		"debug"
 	#define INFO  		"info"
